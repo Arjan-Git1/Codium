@@ -7,28 +7,23 @@ use crossterm::{
     style::Print,
 };
 
-use crate::{keys, mode::Mode};
-pub fn input(mode: &mut Mode) -> io::Result<()> {
-    let mut buffer = String::new();
+use crate::mode;
+use mode::Mode;
 
+pub fn commands(mode: &mut Mode) -> io::Result<()> {
     loop {
         if let Event::Key(event) = event::read()? {
             if event.kind == KeyEventKind::Press {
                 match (event.modifiers, event.code) {
                     (KeyModifiers::CONTROL, KeyCode::Char('q')) => {
-                        *mode = Mode::Normal;
+                        *mode = Mode::Quit;
+                        break;
+                    }
+                    (_, KeyCode::Char('I')) => {
+                        *mode = Mode::Editing;
                         break;
                     }
 
-                    (_, KeyCode::Char(c)) => {
-                        keys::characters(&mut buffer, c)?;
-                    }
-                    (_, KeyCode::Enter) => {
-                        keys::enter(&mut buffer)?;
-                    }
-                    (_, KeyCode::Backspace) => {
-                        keys::backspace(&mut buffer)?;
-                    }
                     _ => {}
                 }
             }
