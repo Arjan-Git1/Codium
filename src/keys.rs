@@ -15,18 +15,22 @@ pub fn characters(buffer: &mut String, c: char) -> io::Result<()> {
 }
 pub fn enter(buffer: &mut String) -> io::Result<()> {
     println!();
-    execute!(stdout(), MoveToNextLine(2))?;
+    execute!(stdout(), MoveToNextLine(1))?;
     buffer.clear();
     Ok(())
 }
 pub fn backspace(buffer: &mut String) -> io::Result<()> {
     if !buffer.is_empty() {
+        buffer.pop();
         execute!(
             stdout(),
             cursor::MoveLeft(1),
             Print(" "),
             cursor::MoveLeft(1)
         )?
+    } else {
+        cursor::MoveToPreviousLine(2);
     }
+
     Ok(())
 }

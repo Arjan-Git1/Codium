@@ -17,6 +17,7 @@ pub fn input(mode: &mut Mode) -> io::Result<()> {
                 match (event.modifiers, event.code) {
                     (KeyModifiers::CONTROL, KeyCode::Char('q')) => {
                         *mode = Mode::Normal;
+                        execute!(stdout(), cursor::SavePosition);
                         break;
                     }
 

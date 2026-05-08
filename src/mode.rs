@@ -1,8 +1,9 @@
 use crossterm::{
+    cursor::{self, MoveTo},
     execute,
     terminal::{EnterAlternateScreen, LeaveAlternateScreen, disable_raw_mode, enable_raw_mode},
 };
-use std::io::{self};
+use std::io::{self, stdout};
 
 use crate::{commands, input};
 #[derive(Debug)]

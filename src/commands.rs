@@ -21,6 +21,7 @@ pub fn commands(mode: &mut Mode) -> io::Result<()> {
                     }
                     (_, KeyCode::Char('I')) => {
                         *mode = Mode::Editing;
+                        execute!(stdout(), cursor::RestorePosition);
                         break;
                     }
 
