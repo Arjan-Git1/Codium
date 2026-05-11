@@ -30,6 +30,9 @@ pub fn input(mode: &mut Mode) -> io::Result<()> {
                     (_, KeyCode::Backspace) => {
                         keys::backspace(&mut buffer)?;
                     }
+                    (_, KeyCode::Up) => {
+                        keys::up();
+                    }
                     _ => {}
                 }
             }

@@ -28,9 +28,22 @@ pub fn backspace(buffer: &mut String) -> io::Result<()> {
             Print(" "),
             cursor::MoveLeft(1)
         )?
-    } else {
-        cursor::MoveToPreviousLine(2);
     }
+    if cursorPosition() {
+        execute!(stdout(), cursor::MoveToPreviousLine(01))?
+    }
+
+    Ok(())
+}
+pub fn cursorPosition() -> bool {
+    if let Ok((column, _row)) = cursor::position() {
+        return column == 0;
+    } else {
+        return false;
+    }
+}
+pub fn up() -> io::Result<()> {
+    execute!(stdout(), cursor::MoveToPreviousLine(1));
 
     Ok(())
 }
