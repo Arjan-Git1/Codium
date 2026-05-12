@@ -1,10 +1,9 @@
-use std::io::{self, Write, stdout};
+use std::io::{self, stdout};
 
 use crossterm::{
-    cursor::{self, MoveLeft, MoveToNextLine},
+    cursor::{self},
     event::{self, Event, KeyCode, KeyEventKind, KeyModifiers},
     execute,
-    style::Print,
 };
 
 use crate::mode;
@@ -21,7 +20,7 @@ pub fn commands(mode: &mut Mode) -> io::Result<()> {
                     }
                     (_, KeyCode::Char('I')) => {
                         *mode = Mode::Editing;
-                        execute!(stdout(), cursor::RestorePosition);
+                        execute!(stdout(), cursor::RestorePosition)?;
                         break;
                     }
 

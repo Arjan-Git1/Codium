@@ -1,10 +1,9 @@
-use std::io::{self, Write, stdout};
+use std::io::{self, stdout};
 
 use crossterm::{
-    cursor::{self, MoveLeft, MoveToNextLine},
+    cursor::{self},
     event::{self, Event, KeyCode, KeyEventKind, KeyModifiers},
     execute,
-    style::Print,
 };
 
 use crate::{keys, mode::Mode};
@@ -17,7 +16,7 @@ pub fn input(mode: &mut Mode) -> io::Result<()> {
                 match (event.modifiers, event.code) {
                     (KeyModifiers::CONTROL, KeyCode::Char('q')) => {
                         *mode = Mode::Normal;
-                        execute!(stdout(), cursor::SavePosition);
+                        execute!(stdout(), cursor::SavePosition)?;
                         break;
                     }
 
@@ -31,7 +30,17 @@ pub fn input(mode: &mut Mode) -> io::Result<()> {
                         keys::backspace(&mut buffer)?;
                     }
                     (_, KeyCode::Up) => {
-                        keys::up();
+                        keys::up()?;
+                    }
+                    (_, KeyCode::Down) => {
+                        keys::down()?;
+                    }
+
+                    (_, KeyCode::Right) => {
+                        keys::right()?;
+                    }
+                    (_, KeyCode::Left) => {
+                        keys::left()?;
                     }
                     _ => {}
                 }

@@ -1,8 +1,7 @@
 use std::io::{self, Write, stdout};
 
 use crossterm::{
-    cursor::{self, MoveLeft, MoveToNextLine},
-    event::{self, Event, KeyCode, KeyEventKind, KeyModifiers},
+    cursor::{self, MoveToNextLine},
     execute,
     style::Print,
 };
@@ -14,7 +13,6 @@ pub fn characters(buffer: &mut String, c: char) -> io::Result<()> {
     Ok(())
 }
 pub fn enter(buffer: &mut String) -> io::Result<()> {
-    println!();
     execute!(stdout(), MoveToNextLine(1))?;
     buffer.clear();
     Ok(())
@@ -29,13 +27,13 @@ pub fn backspace(buffer: &mut String) -> io::Result<()> {
             cursor::MoveLeft(1)
         )?
     }
-    if cursorPosition() {
+    if _cursor_position() {
         execute!(stdout(), cursor::MoveToPreviousLine(01))?
     }
 
     Ok(())
 }
-pub fn cursorPosition() -> bool {
+pub fn _cursor_position() -> bool {
     if let Ok((column, _row)) = cursor::position() {
         return column == 0;
     } else {
@@ -43,7 +41,19 @@ pub fn cursorPosition() -> bool {
     }
 }
 pub fn up() -> io::Result<()> {
-    execute!(stdout(), cursor::MoveToPreviousLine(1));
+    execute!(stdout(), cursor::MoveUp(1))?;
 
+    Ok(())
+}
+pub fn down() -> io::Result<()> {
+    execute!(stdout(), cursor::MoveDown(1))?;
+    Ok(())
+}
+pub fn right() -> io::Result<()> {
+    execute!(stdout(), cursor::MoveRight(1))?;
+    Ok(())
+}
+pub fn left() -> io::Result<()> {
+    execute!(stdout(), cursor::MoveLeft(1))?;
     Ok(())
 }
