@@ -40,20 +40,20 @@ pub fn _cursor_position() -> bool {
         return false;
     }
 }
-pub fn up() -> io::Result<()> {
-    execute!(stdout(), cursor::MoveUp(1))?;
+pub fn up(mut y: u16) -> u16 {
+    y = y - 1;
 
-    Ok(())
+    return y;
 }
-pub fn down() -> io::Result<()> {
-    execute!(stdout(), cursor::MoveDown(1))?;
-    Ok(())
+pub fn down(mut y: u16) -> u16 {
+    y = y + 1;
+    return y;
 }
-pub fn right() -> io::Result<()> {
-    execute!(stdout(), cursor::MoveRight(1))?;
-    Ok(())
+pub fn right(mut x: u16) -> u16 {
+    x = x + 1;
+    return x;
 }
-pub fn left() -> io::Result<()> {
-    execute!(stdout(), cursor::MoveLeft(1))?;
-    Ok(())
+pub fn left(mut x: u16) -> u16 {
+    x = x - 1;
+    return x;
 }

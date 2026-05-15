@@ -160,6 +160,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "piecetable"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "029dcc53aba4dcd4d5eae3ceb96f1caf452ac34cfedb14fb256492496d8f8979"
+
+[[package]]
 name = "proc-macro2"
 version = "1.0.106"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -273,6 +279,7 @@ name = "text_editor"
 version = "0.1.0"
 dependencies = [
  "crossterm",
+ "piecetable",
 ]
 
 [[package]]

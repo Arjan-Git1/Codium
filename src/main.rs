@@ -7,7 +7,7 @@ mod editor;
 mod input;
 mod keys;
 mod mode;
-mod piecetable;
+use piecetable::PieceTable;
 
 use crossterm::{
     ExecutableCommand, execute,
@@ -16,23 +16,21 @@ use crossterm::{
 use editor::Editor;
 use io::stdout;
 
-use crate::{mode::Mode, piecetable::Piece, piecetable::PieceTable};
+use crate::{input::input, mode::Mode};
 fn main() -> io::Result<()> {
-    let piecetable = PieceTable {
-        original: String::new(),
-        add: String::new(),
-        pieces: Vec::new(),
-    };
+    let document = PieceTable::from_str("Hello World");
     let mut editor = Editor {
         mode: Mode::Normal,
         cursor_x: 0,
         cursor_y: 0,
-        document: piecetable,
+        document: document,
     };
     enable_raw_mode();
     execute!(stdout(), EnterAlternateScreen)?;
     loop {
         editor.render()?;
+        editor.input();
+        editor.insert();
     }
     disable_raw_mode();
 }
