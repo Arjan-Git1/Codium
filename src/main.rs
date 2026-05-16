@@ -10,7 +10,9 @@ mod mode;
 use piecetable::PieceTable;
 
 use crossterm::{
-    ExecutableCommand, execute,
+    ExecutableCommand,
+    event::KeyCode,
+    execute,
     terminal::{EnterAlternateScreen, disable_raw_mode, enable_raw_mode},
 };
 use editor::Editor;
@@ -28,9 +30,30 @@ fn main() -> io::Result<()> {
     enable_raw_mode();
     execute!(stdout(), EnterAlternateScreen)?;
     loop {
+        let code = input(&mut editor.mode);
         editor.render()?;
-        editor.input();
-        editor.insert();
+        editor.input(&code);
+        match &code {
+            Ok(KeyCode::Char('I')) => {
+                editor.mode = Mode::Editing;
+            }
+            Ok(KeyCode::Esc) => {
+                editor.mode = Mode::Normal;
+            }
+
+            Ok(_) => {}
+            Err(e) => {}
+        }
+        match editor.mode {
+            Mode::Editing => editor.insert(&code),
+            Mode::Normal => {
+                editor.normal(&code);
+            }
+            Mode::Selection => {}
+            Mode::Quit => {
+                break;
+            }
+        }
     }
-    disable_raw_mode();
+    disable_raw_mode()
 }

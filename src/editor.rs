@@ -1,14 +1,14 @@
 use crate::input::input;
+use crate::keys;
 use crate::{io, mode::Mode};
-use crate::{keys, mode};
 use piecetable::PieceTable;
 
+use core::error;
 use crossterm::event::KeyCode;
-use crossterm::terminal::{
-    self, Clear, ClearType, EnterAlternateScreen, disable_raw_mode, enable_raw_mode,
-};
+use crossterm::terminal::{Clear, ClearType};
 use crossterm::{cursor, execute};
-use std::io::{Write, stdout};
+
+use std::io::{Error, Write, stdout};
 #[derive(Debug)]
 pub struct Editor {
     pub mode: Mode,
@@ -27,8 +27,17 @@ impl Editor {
 
         Ok(())
     }
-    pub fn input(&mut self) {
-        let code = input(&mut self.mode);
+    pub fn input(&mut self, code: &Result<KeyCode, Error>) {
+        let text = self.document.display_result().unwrap();
+
+        let lines: Vec<&str> = text.lines().collect();
+        let current_line = lines[self.cursor_y as usize];
+        let index = self.cursor_offset(
+            self.document.display_result().unwrap().as_str(),
+            self.cursor_x,
+            self.cursor_y,
+        );
+        let index_usize = index as usize;
         match code {
             Ok(KeyCode::Up) => {
                 self.cursor_y = keys::up(self.cursor_y);
@@ -37,10 +46,17 @@ impl Editor {
                 self.cursor_y = keys::down(self.cursor_y);
             }
             Ok(KeyCode::Right) => {
-                self.cursor_x = keys::right(self.cursor_x);
+                if self.cursor_x as usize >= current_line.len() {
+                } else {
+                    self.cursor_x = keys::right(self.cursor_x);
+                }
             }
             Ok(KeyCode::Left) => {
                 self.cursor_x = keys::left(self.cursor_x);
+            }
+            Ok(KeyCode::Backspace) => {
+                keys::backspace(&mut self.document, index_usize);
+                self.cursor_x = self.cursor_x - 1;
             }
             Ok(_) => {}
             Err(E) => {}
@@ -58,8 +74,7 @@ impl Editor {
 
         offset + cursor_x
     }
-    pub fn insert(&mut self) {
-        let code = input(&mut self.mode);
+    pub fn insert(&mut self, code: &Result<KeyCode, Error>) {
         let index = self.cursor_offset(
             self.document.display_result().unwrap().as_str(),
             self.cursor_x,
@@ -71,8 +86,20 @@ impl Editor {
                 self.document.insert(&c.to_string(), index_usize);
                 self.cursor_x = self.cursor_x + 1
             }
+            Ok(KeyCode::Esc) => {
+                self.mode = Mode::Normal;
+            }
             Ok(_) => {}
-            Err(E) => {}
+            Err(e) => {}
+        }
+    }
+    pub fn normal(&mut self, code: &Result<KeyCode, Error>) {
+        match code {
+            Ok(KeyCode::Char('q')) => {
+                self.mode = Mode::Quit;
+            }
+            Ok(_) => {}
+            Err(e) => {}
         }
     }
 }
