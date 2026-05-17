@@ -58,6 +58,12 @@ impl Editor {
                 keys::backspace(&mut self.document, index_usize);
                 self.cursor_x = self.cursor_x - 1;
             }
+            Ok(KeyCode::Enter) => {
+                self.document.insert("\n", index_usize);
+                let (cursorx, cursory) = keys::enter(self.cursor_x, self.cursor_y);
+                self.cursor_y = cursory;
+                self.cursor_x = cursorx;
+            }
             Ok(_) => {}
             Err(E) => {}
         }

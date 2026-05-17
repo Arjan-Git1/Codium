@@ -12,13 +12,13 @@ pub fn characters(buffer: &mut String, c: char) -> io::Result<()> {
     stdout().flush()?;
     Ok(())
 }
-pub fn enter(buffer: &mut String) -> io::Result<()> {
-    execute!(stdout(), MoveToNextLine(1))?;
-    buffer.clear();
-    Ok(())
+pub fn enter(mut cursor_x: u16, mut cursor_y: u16) -> (u16, u16) {
+    cursor_y = cursor_y + 1;
+    cursor_x = 1;
+    (cursor_x, cursor_y)
 }
 pub fn backspace(text: &mut PieceTable, offset: usize) {
-    text.delete_char(offset-1);
+    text.delete_char(offset - 1);
 }
 pub fn _cursor_position() -> bool {
     if let Ok((column, _row)) = cursor::position() {
