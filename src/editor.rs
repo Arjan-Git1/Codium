@@ -1,12 +1,12 @@
 use crate::input::input;
 use crate::keys;
 use crate::{io, mode::Mode};
-use piecetable::PieceTable;
-
 use core::error;
 use crossterm::event::KeyCode;
 use crossterm::terminal::{Clear, ClearType};
 use crossterm::{cursor, execute};
+use piecetable::PieceTable;
+use std::path::Path;
 
 use std::io::{Error, Write, stdout};
 #[derive(Debug)]
@@ -97,6 +97,9 @@ impl Editor {
         match code {
             Ok(KeyCode::Char('q')) => {
                 self.mode = Mode::Quit;
+            }
+            Ok(KeyCode::Char('s')) => {
+                self.document.save_to_file(Path::new("text.txt")).unwrap();
             }
             Ok(_) => {}
             Err(e) => {}
