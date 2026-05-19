@@ -9,6 +9,7 @@ mod keys;
 mod mode;
 use piecetable::PieceTable;
 
+use crate::{input::input, mode::Mode};
 use crossterm::{
     ExecutableCommand,
     event::KeyCode,
@@ -17,10 +18,11 @@ use crossterm::{
 };
 use editor::Editor;
 use io::stdout;
-
-use crate::{input::input, mode::Mode};
+use std::path::Path;
 fn main() -> io::Result<()> {
-    let document = PieceTable::from_str("Hello World");
+    let path = Path::new("text.txt");
+
+    let document = PieceTable::from_file(path).unwrap();
     let mut editor = Editor {
         mode: Mode::Normal,
         cursor_x: 0,

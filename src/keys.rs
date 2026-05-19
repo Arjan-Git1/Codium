@@ -18,7 +18,9 @@ pub fn enter(mut cursor_x: u16, mut cursor_y: u16) -> (u16, u16) {
     (cursor_x, cursor_y)
 }
 pub fn backspace(text: &mut PieceTable, offset: usize) {
-    text.delete_char(offset - 1);
+    if offset > 0 {
+        text.delete_char(offset - 1);
+    }
 }
 pub fn _cursor_position() -> bool {
     if let Ok((column, _row)) = cursor::position() {

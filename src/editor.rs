@@ -31,7 +31,10 @@ impl Editor {
         let text = self.document.display_result().unwrap();
 
         let lines: Vec<&str> = text.lines().collect();
-        let current_line = lines[self.cursor_y as usize];
+        if self.cursor_y as usize >= lines.len() {
+            self.cursor_y = lines.len().saturating_sub(1) as u16;
+        }
+        let current_line = lines.get(self.cursor_y as usize).unwrap_or(&"");
         let index = self.cursor_offset(
             self.document.display_result().unwrap().as_str(),
             self.cursor_x,
@@ -40,7 +43,9 @@ impl Editor {
         let index_usize = index as usize;
         match code {
             Ok(KeyCode::Up) => {
-                self.cursor_y = keys::up(self.cursor_y);
+                if self.cursor_y > 0 {
+                    self.cursor_y = keys::up(self.cursor_y);
+                }
             }
             Ok(KeyCode::Down) => {
                 self.cursor_y = keys::down(self.cursor_y);
@@ -56,7 +61,9 @@ impl Editor {
             }
             Ok(KeyCode::Backspace) => {
                 keys::backspace(&mut self.document, index_usize);
-                self.cursor_x = self.cursor_x - 1;
+                if (self.cursor_x > 0) {
+                    self.cursor_x = self.cursor_x - 1;
+                }
             }
             Ok(KeyCode::Enter) => {
                 self.document.insert("\n", index_usize);
