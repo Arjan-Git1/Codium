@@ -7,8 +7,6 @@ mod editor;
 mod input;
 mod keys;
 mod mode;
-use piecetable::PieceTable;
-
 use crate::{input::input, mode::Mode};
 use crossterm::{
     ExecutableCommand,
@@ -18,8 +16,16 @@ use crossterm::{
 };
 use editor::Editor;
 use io::stdout;
+use piecetable::PieceTable;
+use ratatui::{
+    Terminal,
+    backend::CrosstermBackend,
+    widgets::{Block, Borders, Paragraph},
+};
 use std::path::Path;
 fn main() -> io::Result<()> {
+    let backend = CrosstermBackend::new(io::stdout());
+    let mut terminal = Terminal::new(backend)?;
     let path = Path::new("text.txt");
 
     let document = PieceTable::from_file(path).unwrap();
@@ -28,13 +34,16 @@ fn main() -> io::Result<()> {
         cursor_x: 0,
         cursor_y: 0,
         document: document,
+        scroll_x: 0,
+        scroll_y: 0,
+        visible_height: 0,
     };
     enable_raw_mode();
     execute!(stdout(), EnterAlternateScreen)?;
     loop {
         let code = input(&mut editor.mode);
-        editor.render()?;
         editor.input(&code);
+
         match &code {
             Ok(KeyCode::Char('I')) => {
                 editor.mode = Mode::Editing;
@@ -56,6 +65,8 @@ fn main() -> io::Result<()> {
                 break;
             }
         }
+
+        editor.render(&mut terminal)?;
     }
     disable_raw_mode()
 }

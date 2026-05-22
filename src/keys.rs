@@ -14,7 +14,7 @@ pub fn characters(buffer: &mut String, c: char) -> io::Result<()> {
 }
 pub fn enter(mut cursor_x: u16, mut cursor_y: u16) -> (u16, u16) {
     cursor_y = cursor_y + 1;
-    cursor_x = 1;
+    cursor_x = 0;
     (cursor_x, cursor_y)
 }
 pub fn backspace(text: &mut PieceTable, offset: usize) {
@@ -30,7 +30,7 @@ pub fn _cursor_position() -> bool {
     }
 }
 pub fn up(mut y: u16) -> u16 {
-    y = y - 1;
+    y.saturating_sub(1);
 
     return y;
 }
@@ -43,6 +43,10 @@ pub fn right(mut x: u16) -> u16 {
     return x;
 }
 pub fn left(mut x: u16) -> u16 {
-    x = x - 1;
+    x.saturating_sub(1);
+    return x;
+}
+pub fn home(mut x: u16) -> u16 {
+    x = 0;
     return x;
 }
