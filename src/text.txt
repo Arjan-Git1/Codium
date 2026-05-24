@@ -88,7 +88,7 @@ impl Editor {
                 .cloned()
                 .collect::<Vec<_>>()
                 .join("\n");
-            let syntax = self.syntax_set.find_syntax_by_extension("rs").unwrap();
+            let syntax = self.syntax_set.find_syntax_by_extension("java").unwrap();
 
             let mut highlighter =
                 HighlightLines::new(syntax, &self.theme_set.themes["Solarized (dark)"]);
@@ -228,14 +228,14 @@ impl Editor {
         }
     }
 
-    pub fn normal(&mut self, code: &Result<KeyCode, Error>, path: &Path) {
+    pub fn normal(&mut self, code: &Result<KeyCode, Error>) {
         match code {
             Ok(KeyCode::Char('q')) => {
                 self.mode = Mode::Quit;
             }
 
             Ok(KeyCode::Char('s')) => {
-                self.document.save_to_file(Path::new(path)).unwrap();
+                self.document.save_to_file(Path::new("text.txt")).unwrap();
             }
 
             _ => {}

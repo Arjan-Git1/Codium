@@ -2,6 +2,8 @@ use std::{
     io::{self},
     vec,
 };
+use syntect::{easy::HighlightLines, highlighting::ThemeSet, parsing::SyntaxSet};
+
 mod commands;
 mod editor;
 mod input;
@@ -24,9 +26,12 @@ use ratatui::{
 };
 use std::path::Path;
 fn main() -> io::Result<()> {
+    let syntax_set = SyntaxSet::load_defaults_newlines();
+    let theme_set = ThemeSet::load_defaults();
     let backend = CrosstermBackend::new(io::stdout());
     let mut terminal = Terminal::new(backend)?;
-    let path = Path::new("text.txt");
+    let paths: String = String::from("editor.rs");
+    let path = Path::new(&paths);
 
     let document = PieceTable::from_file(path).unwrap();
     let mut editor = Editor {
@@ -37,6 +42,8 @@ fn main() -> io::Result<()> {
         scroll_x: 0,
         scroll_y: 0,
         visible_height: 0,
+        syntax_set: syntax_set,
+        theme_set: theme_set,
     };
     enable_raw_mode();
     execute!(stdout(), EnterAlternateScreen)?;
@@ -58,7 +65,7 @@ fn main() -> io::Result<()> {
         match editor.mode {
             Mode::Editing => editor.insert(&code),
             Mode::Normal => {
-                editor.normal(&code);
+                editor.normal(&code, &path);
             }
             Mode::Selection => {}
             Mode::Quit => {
@@ -66,7 +73,7 @@ fn main() -> io::Result<()> {
             }
         }
 
-        editor.render(&mut terminal)?;
+        editor.render(&mut terminal, &paths)?;
     }
     disable_raw_mode()
 }
