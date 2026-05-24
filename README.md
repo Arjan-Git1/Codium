@@ -2,28 +2,221 @@
 
 A Vim-inspired code editor for the terminal.
 
-Built with Rust and designed to be fast, lightweight, and easy to use. Codium provides a clean terminal editing experience with syntax highlighting and keyboard-driven navigation. A graphical version is planned for the future.
+Codium is a fast, lightweight, keyboard-first text editor built in Rust. It is designed for developers who prefer working directly in the terminal while still enjoying modern editor features such as syntax highlighting, responsive rendering, and an efficient editing workflow.
 
-## Tech Stack
+The project aims to provide a clean editing experience with minimal resource usage and maximum productivity.
 
-### Rust
-Main programming language used to build Codium.
+> GUI version coming soon.
 
-### Crossterm
-Used for:
-- Terminal control
-- Keyboard input handling
-- Mouse events
-- Cross-platform terminal support
+---
 
-### Ratatui
-Used for:
-- Terminal user interface
+# Table of Contents
+
+- Introduction
+- Why Codium?
+- Philosophy
+- Features
+- Tech Stack
+- Installation
+- Building From Source
+- Usage
+- Project Structure
+- Architecture
+- Rendering System
+- Input Handling
+- Syntax Highlighting
+- Configuration
+- Performance Goals
+- Development Setup
+- Coding Standards
+- Testing
+- Troubleshooting
+- FAQ
+- Roadmap
+- Contributing
+- Changelog
+- Credits
+- License
+
+---
+
+# Introduction
+
+Modern code editors have become increasingly feature-rich. While those features are useful, they often come at the cost of startup speed, memory usage, and simplicity.
+
+Codium takes a different approach.
+
+The editor is designed around a simple idea:
+
+> A code editor should feel fast, responsive, and comfortable regardless of the machine it runs on.
+
+Whether you are writing Rust, Python, JavaScript, C++, or configuration files, Codium aims to provide an efficient terminal-based editing experience.
+
+---
+
+# Why Codium?
+
+Many developers spend most of their day inside a terminal.
+
+For these developers, a terminal editor offers several advantages:
+
+- Faster startup times
+- Lower memory consumption
+- Easy remote server access
+- Keyboard-driven workflows
+- Minimal distractions
+
+Codium combines these benefits with modern Rust tooling.
+
+---
+
+# Philosophy
+
+## Speed First
+
+Editors should never become a bottleneck.
+
+Every feature should be designed with performance in mind.
+
+---
+
+## Keyboard Driven
+
+The keyboard is often the fastest way to interact with software.
+
+Codium embraces keyboard-first workflows.
+
+---
+
+## Simplicity
+
+Complexity should only be added when it provides real value.
+
+---
+
+## Reliability
+
+Editors should behave predictably and consistently.
+
+---
+
+## Extensibility
+
+Future versions of Codium should allow users to customize and extend functionality.
+
+---
+
+# Features
+
+## Current Features
+
+### Terminal-Based Editing
+
+Works directly inside your terminal.
+
+### Cross Platform
+
+Supports:
+
+- Linux
+- Windows
+- macOS
+
+### Syntax Highlighting
+
+Powered by Syntect.
+
+### Fast Rendering
+
+Efficient screen updates.
+
+### Lightweight Design
+
+Low memory usage.
+
+### Rust-Powered
+
+Safe and performant.
+
+---
+
+## Planned Features
+
+### Multiple Cursors
+
+Edit multiple locations simultaneously.
+
+### LSP Support
+
+Language Server Protocol integration.
+
+### Auto Completion
+
+Smarter coding assistance.
+
+### Git Integration
+
+Built-in Git tools.
+
+### File Explorer
+
+Navigate projects more easily.
+
+### Plugin System
+
+Extend Codium with community plugins.
+
+### Themes
+
+Custom color themes.
+
+### GUI Version
+
+Native graphical interface.
+
+---
+
+# Tech Stack
+
+## Rust
+
+Main programming language.
+
+Benefits:
+
+- Memory safety
+- Performance
+- Reliability
+- Strong tooling
+
+---
+
+## Crossterm
+
+Provides:
+
+- Keyboard input
+- Mouse input
+- Terminal manipulation
+- Event handling
+
+---
+
+## Ratatui
+
+Provides:
+
+- User interface rendering
 - Layout management
-- Widgets and rendering
+- Widgets
+- Terminal graphics
 
-### Syntect
-Used for:
+---
+
+## Syntect
+
+Provides:
+
 - Syntax highlighting
 - Language detection
 - Theme support
@@ -34,49 +227,35 @@ Used for:
 
 ## Download
 
-Download the latest Codium executable for your operating system from the releases page.
+Download the latest release from the project's release page.
 
 ---
 
-## Linux
+## Linux Installation
 
-### 1. Make the executable runnable
+### Step 1
+
+Download the binary.
+
+### Step 2
+
+Make it executable.
 
 ```bash
 chmod +x codium
 ```
 
-### 2. Move it to a directory in your PATH
+### Step 3
+
+Move it into PATH.
 
 ```bash
 sudo mv codium /usr/local/bin/
 ```
 
-### 3. Verify the installation
+### Step 4
 
-```bash
-codium --version
-```
-
-If a version number appears, Codium has been installed successfully.
-
----
-
-## macOS
-
-### 1. Make the executable runnable
-
-```bash
-chmod +x codium
-```
-
-### 2. Move it to a directory in your PATH
-
-```bash
-sudo mv codium /usr/local/bin/
-```
-
-### 3. Verify the installation
+Verify installation.
 
 ```bash
 codium --version
@@ -84,54 +263,79 @@ codium --version
 
 ---
 
-## Windows
+## macOS Installation
 
-### 1. Download `codium.exe`
+### Step 1
 
-### 2. Create a folder
+Download the binary.
 
-Example:
+### Step 2
+
+Make it executable.
+
+```bash
+chmod +x codium
+```
+
+### Step 3
+
+Move it into PATH.
+
+```bash
+sudo mv codium /usr/local/bin/
+```
+
+### Step 4
+
+Verify installation.
+
+```bash
+codium --version
+```
+
+---
+
+## Windows Installation
+
+### Step 1
+
+Download `codium.exe`.
+
+### Step 2
+
+Create a folder.
 
 ```text
 C:\Tools\Codium
 ```
 
-### 3. Place `codium.exe` inside the folder
+### Step 3
 
-### 4. Add the folder to PATH
+Place the executable inside.
 
-1. Press `Win + R`
-2. Type `sysdm.cpl`
-3. Open the **Advanced** tab
-4. Click **Environment Variables**
-5. Under **System Variables**, select **Path**
-6. Click **Edit**
-7. Click **New**
-8. Add:
+### Step 4
 
-```text
-C:\Tools\Codium
-```
+Add the folder to PATH.
 
-9. Save all changes
+### Step 5
 
-### 5. Restart your terminal
+Restart terminal.
 
-### 6. Verify installation
+### Step 6
+
+Verify installation.
 
 ```powershell
 codium --version
 ```
 
-If a version number is displayed, the installation was successful.
-
 ---
 
 # Building From Source
 
-## Prerequisites
+## Install Rust
 
-Install Rust from:
+Visit:
 
 https://rust-lang.org
 
@@ -144,13 +348,15 @@ cargo --version
 
 ---
 
-## Clone the Repository
+## Clone Repository
 
 ```bash
 git clone https://github.com/yourusername/codium.git
 ```
 
-Move into the project directory:
+---
+
+## Enter Project
 
 ```bash
 cd codium
@@ -158,30 +364,18 @@ cd codium
 
 ---
 
-## Build a Release Version
+## Build
 
 ```bash
 cargo build --release
 ```
 
-The compiled binary will be located at:
-
-```text
-target/release/codium
-```
-
 ---
 
-## Run Codium
+## Run
 
 ```bash
 cargo run
-```
-
-or
-
-```bash
-./target/release/codium
 ```
 
 ---
@@ -194,122 +388,514 @@ Open a file:
 codium main.rs
 ```
 
-Create a new file:
+---
 
-```bash
-codium notes.txt
-```
-
-Open the current directory:
+Open a project:
 
 ```bash
 codium .
 ```
 
-Open a project folder:
+---
+
+Create a file:
 
 ```bash
-codium ~/Projects/my-project
+codium notes.txt
 ```
+
+---
+
+# Project Structure
+
+```text
+src/
+├── main.rs
+├── editor.rs
+├── buffer.rs
+├── renderer.rs
+├── syntax.rs
+├── commands.rs
+├── config.rs
+└── utils.rs
+```
+
+---
+
+## main.rs
+
+Application entry point.
+
+Responsible for:
+
+- Startup
+- Initialization
+- Event loop setup
+
+---
+
+## editor.rs
+
+Editor state management.
+
+Responsible for:
+
+- Cursor tracking
+- File operations
+- Buffer interactions
+
+---
+
+## buffer.rs
+
+Text storage layer.
+
+Responsible for:
+
+- Text insertion
+- Text deletion
+- Line management
+
+---
+
+## renderer.rs
+
+Screen rendering.
+
+Responsible for:
+
+- UI drawing
+- Layout updates
+- Refresh logic
+
+---
+
+## syntax.rs
+
+Syntax highlighting system.
+
+Responsible for:
+
+- Parsing
+- Highlight generation
+- Theme handling
+
+---
+
+# Architecture
+
+Codium follows a modular architecture.
+
+Components communicate through clearly defined interfaces.
+
+Benefits:
+
+- Easier maintenance
+- Better testing
+- Improved scalability
+
+---
+
+# Rendering System
+
+Rendering is handled by Ratatui.
+
+Process:
+
+1. Read editor state
+2. Generate UI components
+3. Render frame
+4. Flush output
+
+---
+
+# Input Handling
+
+Input is handled by Crossterm.
+
+Supported events:
+
+- Keyboard
+- Mouse
+- Resize events
+
+---
+
+# Syntax Highlighting
+
+Syntax highlighting is powered by Syntect.
+
+Supported languages include:
+
+- Rust
+- Python
+- JavaScript
+- TypeScript
+- C
+- C++
+- Go
+- Java
+- Kotlin
+- Swift
+- Shell
+- HTML
+- CSS
+- JSON
+- YAML
+- TOML
+- Markdown
+
+---
+
+# Configuration
+
+Future versions will support configuration files.
+
+Example:
+
+```toml
+theme = "dark"
+tab_width = 4
+line_numbers = true
+```
+
+---
+
+# Performance Goals
+
+Codium is designed with the following targets:
+
+- Fast startup
+- Low memory usage
+- Smooth scrolling
+- Responsive input
+- Efficient rendering
+
+---
+
+# Development Setup
+
+Install Rust.
+
+Clone repository.
+
+Build project.
+
+Run tests.
+
+Start developing.
+
+---
+
+# Coding Standards
+
+## Naming
+
+Use descriptive names.
+
+---
+
+## Formatting
+
+Use:
+
+```bash
+cargo fmt
+```
+
+---
+
+## Linting
+
+Use:
+
+```bash
+cargo clippy
+```
+
+---
+
+## Documentation
+
+Document public APIs.
+
+---
+
+# Testing
+
+Run tests:
+
+```bash
+cargo test
+```
+
+Run all checks:
+
+```bash
+cargo fmt --check
+cargo clippy
+cargo test
+```
+
+---
+
+# Troubleshooting
+
+## Command Not Found
+
+Ensure Codium is in PATH.
+
+---
+
+## Permission Denied
+
+Make executable:
+
+```bash
+chmod +x codium
+```
+
+---
+
+## Rust Missing
+
+Install Rust and verify:
+
+```bash
+rustc --version
+```
+
+---
+
+## Build Failure
+
+Update dependencies:
+
+```bash
+cargo update
+```
+
+---
+
+# FAQ
+
+## Why Rust?
+
+Rust provides performance and safety.
+
+---
+
+## Why Terminal?
+
+Many developers prefer terminal workflows.
+
+---
+
+## Is Codium Open Source?
+
+Yes.
+
+---
+
+## Is Codium Free?
+
+Yes.
+
+---
+
+## Does It Support Plugins?
+
+Planned.
+
+---
+
+## Does It Support LSP?
+
+Planned.
+
+---
+
+## Does It Work On Windows?
+
+Yes.
+
+---
+
+## Does It Work On Linux?
+
+Yes.
+
+---
+
+## Does It Work On macOS?
+
+Yes.
+
+---
+
+## Is A GUI Planned?
+
+Yes.
+
+---
+
+# Roadmap
+
+## Phase 1
+
+- Basic editor
+- Syntax highlighting
+- File loading
+- File saving
+
+---
+
+## Phase 2
+
+- Search
+- Replace
+- Configuration files
+
+---
+
+## Phase 3
+
+- Multiple cursors
+- Themes
+- Plugin system
+
+---
+
+## Phase 4
+
+- LSP support
+- Git integration
+- File explorer
+
+---
+
+## Phase 5
+
+- GUI release
 
 ---
 
 # Contributing
 
-Contributions are welcome and appreciated.
+Contributions are welcome.
 
-Whether you want to fix bugs, improve documentation, optimize performance, or add new features, your help is always welcome.
+---
 
-## How to Contribute
+## Fork
 
-### 1. Fork the Repository
+Create a fork.
 
-Create your own fork of the project.
+---
 
-### 2. Clone Your Fork
+## Clone
 
 ```bash
 git clone https://github.com/yourusername/codium.git
 ```
 
-### 3. Create a Branch
+---
+
+## Branch
 
 ```bash
 git checkout -b feature/my-feature
 ```
 
-### 4. Make Your Changes
+---
 
-Implement your improvements, fixes, or new features.
-
-### 5. Test Your Changes
-
-Ensure the project builds successfully:
+## Commit
 
 ```bash
-cargo build
-cargo test
+git commit -m "Add feature"
 ```
 
-### 6. Commit Your Changes
+---
 
-```bash
-git commit -m "Add my feature"
-```
-
-### 7. Push Your Branch
+## Push
 
 ```bash
 git push origin feature/my-feature
 ```
 
-### 8. Open a Pull Request
+---
 
-Submit a Pull Request describing your changes and why they should be included.
+## Pull Request
+
+Open a pull request.
+
+Describe:
+
+- What changed
+- Why it changed
+- How it was tested
 
 ---
 
-## Contribution Guidelines
+# Contribution Guidelines
 
-- Keep code clean and readable.
+- Keep code readable.
 - Follow Rust best practices.
-- Document new features when necessary.
-- Test your changes before submitting.
-- Keep pull requests focused on a single change whenever possible.
+- Write tests when appropriate.
+- Document new functionality.
+- Keep pull requests focused.
 
 ---
 
-# Reporting Bugs
+# Changelog
 
-Found a bug?
+## v0.1.0
 
-Please open an issue and include:
-
-- Operating system
-- Codium version
-- Steps to reproduce
-- Expected behavior
-- Actual behavior
-- Screenshots (if applicable)
+- Initial project
+- Basic editor
+- File loading
 
 ---
 
-# Feature Requests
+## v0.2.0
 
-Have an idea for Codium?
+- Syntax highlighting
+- Improved rendering
 
-Open an issue describing:
+---
 
-- The problem you're trying to solve
-- Your proposed solution
-- Alternative solutions you've considered
+## v0.3.0
 
-Feature requests and feedback are always welcome.
+- Performance improvements
+- Better input handling
+
+---
+
+# Credits
+
+Special thanks to:
+
+- Rust
+- Crossterm
+- Ratatui
+- Syntect
+- Contributors
+- Testers
+- Open source community
 
 ---
 
 # License
 
-This project is licensed under the MIT License.
+Licensed under the MIT License.
 
-Feel free to use, modify, and distribute Codium according to the terms of the license.
+You are free to use, modify, distribute, and contribute to Codium according to the terms of the license.
+
+---
+
+# Final Note
+
+Thank you for checking out Codium.
+
+Whether you are fixing bugs, improving documentation, testing features, suggesting ideas, or contributing code, your support helps make the project better for everyone.
+
+Happy coding!
