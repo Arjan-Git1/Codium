@@ -1,14 +1,46 @@
-# Codium
-A vim inspired code editor for the Terminal(gui coming soon)
+Codium
 
-# Tech Stack
-1. Rust(Main Language):
-    A. Crossterm
-    B. Ratatui
-    C.Syntect
+Codium is a lightweight, Vim-inspired code editor designed for the terminal. It focuses on speed, efficiency, and a keyboard-driven workflow while remaining modern and extensible.
 
-Download and use!
+GUI version coming soon!
 
-1. Download
-2. Put it in path variable of the environment variable
-3. Feel free to use!!
+Features
+Vim-inspired navigation and editing
+Fast terminal-based interface
+Syntax highlighting
+Cross-platform support
+Lightweight and efficient
+Built with modern Rust libraries
+Future GUI edition planned
+Tech Stack
+Rust
+
+The entire editor is written in Rust for performance, memory safety, and reliability.
+
+Libraries Used
+Crossterm
+
+Provides:
+
+Terminal input handling
+Keyboard event processing
+Mouse support
+Cross-platform terminal control
+Ratatui
+
+Provides:
+
+Terminal user interface components
+Layout management
+Rendering system
+Interactive editor interface
+Syntect
+
+Provides:
+
+Syntax highlighting
+Theme support
+Language detection
+Code coloring
+Installation
+
