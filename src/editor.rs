@@ -69,6 +69,7 @@ impl Editor {
         &mut self,
         terminal: &mut Terminal<CrosstermBackend<std::io::Stdout>>,
         path: &String,
+        extension: &String,
     ) -> io::Result<()> {
         terminal.draw(|mut frame| {
             let bg = Block::default().style(Style::default().bg(Color::Rgb(0, 0, 0)));
@@ -88,7 +89,7 @@ impl Editor {
                 .cloned()
                 .collect::<Vec<_>>()
                 .join("\n");
-            let syntax = self.syntax_set.find_syntax_by_extension("rs").unwrap();
+            let syntax = self.syntax_set.find_syntax_by_extension(extension).unwrap();
 
             let mut highlighter =
                 HighlightLines::new(syntax, &self.theme_set.themes["Solarized (dark)"]);

@@ -30,9 +30,13 @@ fn main() -> io::Result<()> {
     let theme_set = ThemeSet::load_defaults();
     let backend = CrosstermBackend::new(io::stdout());
     let mut terminal = Terminal::new(backend)?;
-    let paths: String = String::from("editor.rs");
+    let mut paths: String = String::new();
+    io::stdin().read_line(&mut paths).expect("error");
+    let paths = paths.trim().to_string();
     let path = Path::new(&paths);
-
+    let extension = path.extension();
+    let extension_string = extension.and_then(|s| s.to_str()).map(|s| s.to_string());
+    let extension_args = extension_string.unwrap();
     let document = PieceTable::from_file(path).unwrap();
     let mut editor = Editor {
         mode: Mode::Normal,
@@ -73,7 +77,7 @@ fn main() -> io::Result<()> {
             }
         }
 
-        editor.render(&mut terminal, &paths)?;
+        editor.render(&mut terminal, &paths, &extension_args)?;
     }
     disable_raw_mode()
 }
