@@ -12,7 +12,7 @@ use ratatui::{
     Terminal,
     backend::CrosstermBackend,
     layout::Position,
-    style::{Color, Style},
+    style::{Color, Modifier, Style},
     widgets::{Block, Borders, Paragraph},
 };
 use std::io::{Error, Write, stdout};
@@ -72,7 +72,7 @@ impl Editor {
         extension: &String,
     ) -> io::Result<()> {
         terminal.draw(|mut frame| {
-            let bg = Block::default().style(Style::default().bg(Color::Rgb(0, 0, 0)));
+            let bg = Block::default().style(Style::default().bg(Color::Rgb(40, 40, 40)));
 
             frame.render_widget(bg, frame.area());
             let area = frame.area();
@@ -92,7 +92,8 @@ impl Editor {
             let syntax = self.syntax_set.find_syntax_by_extension(extension).unwrap();
 
             let mut highlighter =
-                HighlightLines::new(syntax, &self.theme_set.themes["Solarized (dark)"]);
+                HighlightLines::new(syntax, &self.theme_set.themes["base16-eighties.dark"]);
+
             let mut rendered_lines = Vec::new();
 
             for line in lines.iter().skip(self.scroll_y).take(self.visible_height) {
@@ -103,11 +104,13 @@ impl Editor {
                     .map(|(style, text)| {
                         Span::styled(
                             text.to_string(),
-                            Style::default().fg(Color::Rgb(
-                                style.foreground.r,
-                                style.foreground.g,
-                                style.foreground.b,
-                            )),
+                            Style::default()
+                                .fg(Color::Rgb(
+                                    style.foreground.r,
+                                    style.foreground.g,
+                                    style.foreground.b,
+                                ))
+                                .add_modifier(Modifier::BOLD),
                         )
                     })
                     .collect::<Vec<_>>();
@@ -115,6 +118,12 @@ impl Editor {
                 rendered_lines.push(Line::from(spans));
             }
             let paragraph = Paragraph::new(rendered_lines)
+                .style(
+                    Style::default()
+                        .fg(Color::Rgb(235, 219, 178))
+                        .bg(Color::Rgb(40, 40, 40))
+                        .add_modifier(Modifier::BOLD),
+                )
                 .block(Block::default().title(path.as_str()).borders(Borders::ALL));
 
             frame.render_widget(paragraph, frame.area());

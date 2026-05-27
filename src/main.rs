@@ -25,6 +25,7 @@ use ratatui::{
     widgets::{Block, Borders, Paragraph},
 };
 use std::path::Path;
+use tree_sitter::Parser;
 fn main() -> io::Result<()> {
     let syntax_set = SyntaxSet::load_defaults_newlines();
     let theme_set = ThemeSet::load_defaults();
