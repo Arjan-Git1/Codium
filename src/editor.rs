@@ -2,7 +2,7 @@ use crate::input::input;
 use crate::keys;
 use crate::{io, mode::Mode};
 use core::error;
-use crossterm::event::KeyCode;
+use crossterm::event::{KeyCode, MouseEvent};
 use crossterm::terminal;
 use crossterm::terminal::{Clear, ClearType};
 use crossterm::{cursor, execute};
@@ -213,6 +213,7 @@ impl Editor {
         }
 
         offset + cursor_x
+        //get cursor offset
     }
 
     pub fn insert(&mut self, code: &Result<KeyCode, Error>) {

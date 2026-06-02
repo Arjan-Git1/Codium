@@ -24,10 +24,13 @@ use ratatui::{
     backend::CrosstermBackend,
     widgets::{Block, Borders, Paragraph},
 };
+use std::fs::File;
+use std::io::BufReader;
 use std::path::Path;
+use syntect::parsing::SyntaxDefinition;
+use syntect::parsing::SyntaxSetBuilder;
 use tree_sitter::Parser;
 fn main() -> io::Result<()> {
-    let syntax_set = SyntaxSet::load_defaults_newlines();
     let theme_set = ThemeSet::load_defaults();
     let backend = CrosstermBackend::new(io::stdout());
     let mut terminal = Terminal::new(backend)?;
@@ -38,6 +41,10 @@ fn main() -> io::Result<()> {
     let extension = path.extension();
     let extension_string = extension.and_then(|s| s.to_str()).map(|s| s.to_string());
     let extension_args = extension_string.unwrap();
+    let syntax_set;
+
+    syntax_set = SyntaxSet::load_defaults_newlines();
+
     let document = PieceTable::from_file(path).unwrap();
     let mut editor = Editor {
         mode: Mode::Normal,
