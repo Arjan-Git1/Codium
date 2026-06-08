@@ -7,15 +7,16 @@ use crossterm::terminal;
 use crossterm::terminal::{Clear, ClearType};
 use crossterm::{cursor, execute};
 use piecetable::PieceTable;
+use ratatui::layout::{Constraint, Direction, Layout};
 use ratatui::text::{Line, Span};
 use ratatui::{
-    Terminal,
     backend::CrosstermBackend,
     layout::Position,
     style::{Color, Modifier, Style},
     widgets::{Block, Borders, Paragraph},
+    Terminal,
 };
-use std::io::{Error, Write, stdout};
+use std::io::{stdout, Error, Write};
 use std::path::Path;
 
 use syntect::{easy::HighlightLines, highlighting::ThemeSet, parsing::SyntaxSet};
@@ -64,7 +65,6 @@ impl Editor {
 
         self.cursor_y = text.split('\n').count().saturating_sub(1) as u16;
     }
-
     pub fn render(
         &mut self,
         terminal: &mut Terminal<CrosstermBackend<std::io::Stdout>>,
@@ -75,20 +75,20 @@ impl Editor {
             let bg = Block::default().style(Style::default().bg(Color::Rgb(40, 40, 40)));
 
             frame.render_widget(bg, frame.area());
-            let area = frame.area();
 
-            self.visible_height = area.height.saturating_sub(2) as usize;
+            let chunks = Layout::default()
+                .direction(Direction::Vertical)
+                .constraints([Constraint::Min(1), Constraint::Length(1)])
+                .split(frame.area());
+
+            let editor_area = chunks[0];
+            let status_area = chunks[1];
+
+            self.visible_height = editor_area.height.saturating_sub(2) as usize;
 
             let text = self.document.display_result().unwrap();
             let lines: Vec<&str> = text.split('\n').collect();
 
-            let visible_lines = lines
-                .iter()
-                .skip(self.scroll_y)
-                .take(self.visible_height)
-                .cloned()
-                .collect::<Vec<_>>()
-                .join("\n");
             let syntax = self.syntax_set.find_syntax_by_extension(extension).unwrap();
 
             let mut highlighter =
@@ -117,21 +117,39 @@ impl Editor {
 
                 rendered_lines.push(Line::from(spans));
             }
+
             let paragraph = Paragraph::new(rendered_lines)
                 .style(
                     Style::default()
                         .fg(Color::Rgb(235, 219, 178))
-                        .bg(Color::Rgb(40, 40, 40))
-                        .add_modifier(Modifier::BOLD),
+                        .bg(Color::Rgb(40, 40, 40)),
                 )
                 .block(Block::default().title(path.as_str()).borders(Borders::ALL));
 
-            frame.render_widget(paragraph, frame.area());
+            frame.render_widget(paragraph, editor_area);
+
+            let status_text = format!(
+                " {} | Ln {} Col {} | {} lines | {:?} ",
+                path,
+                self.cursor_y + 1,
+                self.cursor_x + 1,
+                lines.len(),
+                self.mode
+            );
+
+            let status_bar = Paragraph::new(status_text).style(
+                Style::default()
+                    .bg(Color::Blue)
+                    .fg(Color::White)
+                    .add_modifier(Modifier::BOLD),
+            );
+
+            frame.render_widget(status_bar, status_area);
 
             let screen_y = self.cursor_y.saturating_sub(self.scroll_y as u16);
 
             frame.set_cursor_position((self.cursor_x + 1, screen_y + 1));
-        });
+        })?;
 
         Ok(())
     }

@@ -59,6 +59,7 @@ fn main() -> io::Result<()> {
     };
     enable_raw_mode();
     execute!(stdout(), EnterAlternateScreen)?;
+    editor.render(&mut terminal, &paths, &extension_args)?;
     loop {
         let code = input(&mut editor.mode);
         editor.input(&code);
